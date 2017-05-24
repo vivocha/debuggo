@@ -7,25 +7,25 @@ chai.use(spies);
 
 describe('debuggo', function() {
 
-  describe('createLogger', function() {
+  describe('getLogger', function() {
 
     it('create a logger with no context', function() {
-      let l = debuggo.createLogger('test-1');
+      let l = debuggo.getLogger('test-1');
       l.log.should.be.a('function');
     });
 
     it('create a logger with a context', function() {
-      let l = debuggo.createLogger('test-2', 'bbb');
+      let l = debuggo.getLogger('test-2', 'bbb');
       l.info.should.be.a('function');
     });
 
     it('create cache loggers by namespace and context', function() {
-      let l1 = debuggo.createLogger('test-1');
-      let l2 = debuggo.createLogger('test-1');
-      let l3 = debuggo.createLogger('test-2', 'bbb');
-      let l4 = debuggo.createLogger('test-2', 'bbb');
-      let l5 = debuggo.createLogger('test-2', 'ccc');
-      let l6 = debuggo.createLogger('test-2');
+      let l1 = debuggo.getLogger('test-1');
+      let l2 = debuggo.getLogger('test-1');
+      let l3 = debuggo.getLogger('test-2', 'bbb');
+      let l4 = debuggo.getLogger('test-2', 'bbb');
+      let l5 = debuggo.getLogger('test-2', 'ccc');
+      let l6 = debuggo.getLogger('test-2');
       l1.should.equal(l2);
       l3.should.equal(l4);
       l4.should.not.equal(l5);
@@ -43,13 +43,13 @@ describe('debuggo', function() {
         } as any
       };
       (<any>global).window = w;
-      let l1 = debuggo.createLogger('test-3');
+      let l1 = debuggo.getLogger('test-3');
       l1.info('aaa');
       w.console.info.should.have.been.called.once;
 
       w.console.debug = chai.spy();
       w.console.trace = chai.spy();
-      let l2 = debuggo.createLogger('test-4', 'ccc');
+      let l2 = debuggo.getLogger('test-4', 'ccc');
       l2.debug('aaa');
       l2.info('aaa');
       l2.info.log;

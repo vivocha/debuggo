@@ -16,7 +16,7 @@ const __loggers: {
   [ns:string]: Logger;
 } = {};
 
-export function createLogger(ns: string, context?: string): Logger {
+export function getLogger(ns: string, context?: string): Logger {
   let cacheKey = context ? `${ns}@@${context}` : ns;
 
   if (!__loggers[cacheKey]) {
@@ -67,7 +67,7 @@ export function namespaces() {
 }
 
 export function cb(ns: string = ''): ((err: any, data?: any) => void) {
-  const l:Logger = createLogger(ns);
+  const l:Logger = getLogger(ns);
   return (err: any, data?: any) => {
     if (err) {
       l.error(err);
@@ -78,7 +78,7 @@ export function cb(ns: string = ''): ((err: any, data?: any) => void) {
 }
 
 export function promise(p:PromiseLike<any>, ns: string = ''): PromiseLike<any> {
-  const l:Logger = createLogger(ns);
+  const l:Logger = getLogger(ns);
   return p.then(function(data) {
     l.info(data);
   }, function(err) {

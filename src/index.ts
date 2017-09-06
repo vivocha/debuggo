@@ -1,12 +1,14 @@
 import * as debug from 'debug';
+import { IDebugger } from 'debug';
+export { IDebugger } from 'debug';
 
 export interface Logger {
-  log: debug.IDebugger;
-  info: debug.IDebugger;
-  warn: debug.IDebugger;
-  error: debug.IDebugger;
-  debug: debug.IDebugger;
-  trace: debug.IDebugger;
+  log: IDebugger;
+  info: IDebugger;
+  warn: IDebugger;
+  error: IDebugger;
+  debug: IDebugger;
+  trace: IDebugger;
 }
 
 const __namespaces: {
@@ -21,9 +23,9 @@ export function getLogger(ns: string, context?: string): Logger {
 
   if (!__loggers[cacheKey]) {
     __namespaces[ns] = true;
-    let d = context ? function(label:string): debug.IDebugger {
-      let origDebugger:debug.IDebugger = debug(label);
-      let wrappedDebugger:debug.IDebugger = <debug.IDebugger>function(formatter: string, ...args: any[]) {
+    let d = context ? function(label:string): IDebugger {
+      let origDebugger:IDebugger = debug(label);
+      let wrappedDebugger:IDebugger = <IDebugger>function(formatter: string, ...args: any[]) {
         origDebugger(`${context} ${formatter}`, ...args);
       };
       wrappedDebugger.enabled = origDebugger.enabled;

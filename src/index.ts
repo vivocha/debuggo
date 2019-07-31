@@ -25,8 +25,10 @@ function createLogger(ns: string, context?: string): Logger {
         let wrappedDebugger: IDebugger = <IDebugger>function(formatter: string, ...args: any[]) {
           origDebugger(`${context} ${formatter}`, ...args);
         };
-        wrappedDebugger.enabled = origDebugger.enabled;
-        wrappedDebugger.namespace = origDebugger.namespace;
+        ['namespace', 'enabled', 'userColors', 'color'].forEach(i => {
+          wrappedDebugger[i] = origDebugger[i];
+        })
+        wrappedDebugger['destroy'] = () => origDebugger['destroy']();
         Object.defineProperty(wrappedDebugger, 'log', {
           get: () => origDebugger.log,
           set: v => (origDebugger.log = v)
@@ -61,6 +63,9 @@ export function getLogger(ns: string, context?: string, cache?: boolean): Logger
   let out: Logger;
   if (cache === false) {
     out = createLogger(ns, context);
+    for (let i in out) {
+      out[i].destroy(); // this is to avoid caching forever in debug.instances
+    }
   } else {
     let cacheKey = context ? `${ns}@@${context}` : ns;
 

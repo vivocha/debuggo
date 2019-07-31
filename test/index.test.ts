@@ -6,20 +6,18 @@ chai.should();
 chai.use(spies);
 
 describe('debuggo', function() {
-
   describe('getLogger', function() {
-
-    it('create a logger with no context', function() {
+    it('should create a logger with no context', function() {
       let l = debuggo.getLogger('test-1');
       l.log.should.be.a('function');
     });
 
-    it('create a logger with a context', function() {
+    it('should create a logger with a context', function() {
       let l = debuggo.getLogger('test-2', 'bbb');
       l.info.should.be.a('function');
     });
 
-    it('create cache loggers by namespace and context', function() {
+    it('should create cached loggers by namespace and context', function() {
       let l1 = debuggo.getLogger('test-1');
       let l2 = debuggo.getLogger('test-1');
       let l3 = debuggo.getLogger('test-2', 'bbb');
@@ -33,7 +31,16 @@ describe('debuggo', function() {
       l6.should.not.equal(l3);
     });
 
-    it('use console.log to log when available', function() {
+    it('should create non cached loggers', function() {
+      let l1 = debuggo.getLogger('test-1', undefined, false);
+      let l2 = debuggo.getLogger('test-1', undefined, false);
+      let l3 = debuggo.getLogger('test-2', 'bbb', false);
+      let l4 = debuggo.getLogger('test-2', 'bbb', false);
+      l1.should.not.equal(l2);
+      l3.should.not.equal(l4);
+    });
+
+    it('should use console.log to log when available', function() {
       let w = {
         console: {
           log: chai.spy(),
@@ -56,19 +63,15 @@ describe('debuggo', function() {
       w.console.debug.should.have.been.called.once;
       w.console.info.should.have.been.called.twice;
     });
-
   });
 
   describe('namespaces', function() {
-
     it('should return the namespaces', function() {
       debuggo.namespaces().should.deep.equal(['test-1', 'test-2', 'test-3', 'test-4']);
-    })
-
+    });
   });
 
   describe('cb', function() {
-
     it('should return a logging callback', function() {
       let w = {
         console: {
@@ -91,11 +94,9 @@ describe('debuggo', function() {
       f2(null, 'data');
       w.console.info.should.have.been.called.once;
     });
-
   });
 
   describe('promise', function() {
-
     it('should log a promise', function() {
       let w = {
         console: {
@@ -115,9 +116,6 @@ describe('debuggo', function() {
           });
         });
       });
-    })
-
+    });
   });
-
-
 });

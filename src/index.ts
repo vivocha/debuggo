@@ -27,7 +27,7 @@ function createLogger(ns: string, context?: string): Logger {
         };
         ['namespace', 'enabled', 'userColors', 'color'].forEach(i => {
           wrappedDebugger[i] = origDebugger[i];
-        })
+        });
         wrappedDebugger['destroy'] = () => origDebugger['destroy']();
         Object.defineProperty(wrappedDebugger, 'log', {
           get: () => origDebugger.log,

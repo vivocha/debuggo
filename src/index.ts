@@ -1,6 +1,6 @@
 import * as debug from 'debug';
 import { IDebugger } from 'debug';
-export { IDebugger } from 'debug';
+export { disable, enable, IDebugger } from 'debug';
 
 export interface Logger {
   log: IDebugger;

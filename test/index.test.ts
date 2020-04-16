@@ -5,19 +5,24 @@ import * as debuggo from '../dist/index';
 chai.should();
 chai.use(spies);
 
-describe('debuggo', function() {
-  describe('getLogger', function() {
-    it('should create a logger with no context', function() {
+describe('debuggo', function () {
+  describe('getLogger', function () {
+    it('should create a logger with no context', function () {
       let l = debuggo.getLogger('test-1');
       l.log.should.be.a('function');
     });
 
-    it('should create a logger with a context', function() {
+    it('should create a logger with a context', function () {
       let l = debuggo.getLogger('test-2', 'bbb');
       l.info.should.be.a('function');
     });
 
-    it('should create cached loggers by namespace and context', function() {
+    it('should create a logger with options', function () {
+      let l = debuggo.getLogger({ ns: 'test-2', context: 'bbb' });
+      l.info.should.be.a('function');
+    });
+
+    it('should create cached loggers by namespace and context', function () {
       let l1 = debuggo.getLogger('test-1');
       let l2 = debuggo.getLogger('test-1');
       let l3 = debuggo.getLogger('test-2', 'bbb');
@@ -31,7 +36,7 @@ describe('debuggo', function() {
       l6.should.not.equal(l3);
     });
 
-    it('should create non cached loggers', function() {
+    it('should create non cached loggers', function () {
       let l1 = debuggo.getLogger('test-1', undefined, false);
       let l2 = debuggo.getLogger('test-1', undefined, false);
       let l3 = debuggo.getLogger('test-2', 'bbb', false);
@@ -40,14 +45,15 @@ describe('debuggo', function() {
       l3.should.not.equal(l4);
     });
 
-    it('should use console.log to log when available', function() {
+    it('should use console.log to log when available', function () {
+      debugger;
       let w = {
         console: {
           log: chai.spy(),
           info: chai.spy(),
           warn: chai.spy(),
-          error: chai.spy()
-        } as any
+          error: chai.spy(),
+        } as any,
       };
       (<any>global).window = w;
       let l1 = debuggo.getLogger('test-3');
@@ -65,21 +71,21 @@ describe('debuggo', function() {
     });
   });
 
-  describe('namespaces', function() {
-    it('should return the namespaces', function() {
+  describe('namespaces', function () {
+    it('should return the namespaces', function () {
       debuggo.namespaces().should.deep.equal(['test-1', 'test-2', 'test-3', 'test-4']);
     });
   });
 
-  describe('cb', function() {
-    it('should return a logging callback', function() {
+  describe('cb', function () {
+    it('should return a logging callback', function () {
       let w = {
         console: {
           log: chai.spy(),
           info: chai.spy(),
           warn: chai.spy(),
-          error: chai.spy()
-        } as any
+          error: chai.spy(),
+        } as any,
       };
       (<any>global).window = w;
       let f = debuggo.cb('test-5');
@@ -96,15 +102,15 @@ describe('debuggo', function() {
     });
   });
 
-  describe('promise', function() {
-    it('should log a promise', function() {
+  describe('promise', function () {
+    it('should log a promise', function () {
       let w = {
         console: {
           log: chai.spy(),
           info: chai.spy(),
           warn: chai.spy(),
-          error: chai.spy()
-        } as any
+          error: chai.spy(),
+        } as any,
       };
       (<any>global).window = w;
       return debuggo.promise(Promise.resolve(true), 'test-6').then(() => {

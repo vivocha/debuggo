@@ -26,6 +26,7 @@ const __loggers: {
 
 function wrap(opts: LoggerOptions, type: string): IDebugger {
   const d = debug(`${opts.ns}:${type}`);
+  d.destroy(); // this is to avoid caching forever in debug.instances
   if (opts.context) {
     const handler = {
       apply: function (target, thisArg, argumentList) {
@@ -55,6 +56,11 @@ function createLogger(opts: LoggerOptions): Logger {
       out.trace.log = (window.console.trace ? window.console.trace : window.console.log).bind(window.console);
     } catch (e) {}
   }
+
+  for (let i in out) {
+    out[i].destroy(); // this is to avoid caching forever in debug.instances
+  }
+
   return out;
 }
 
@@ -65,9 +71,6 @@ export function getLogger(nsOrOpts: string | LoggerOptions, context?: string, ca
   let out: Logger;
   if (opts.cache === false) {
     out = createLogger(opts);
-    for (let i in out) {
-      out[i].destroy(); // this is to avoid caching forever in debug.instances
-    }
   } else {
     let cacheKey = opts.context ? `${opts.ns}@@${opts.context}` : opts.ns;
     if (!__loggers[cacheKey]) {

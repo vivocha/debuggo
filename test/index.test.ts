@@ -124,4 +124,10 @@ describe('debuggo', function () {
       });
     });
   });
+  describe('re-export', function () {
+    it('should re-export "enable" and "disable" from debug', function () {
+      debuggo.enable.should.be.a('function');
+      debuggo.disable.should.be.a('function');
+    });
+  });
 });

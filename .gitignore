@@ -1,5 +1,4 @@
 node_modules
-.nyc_output
 .vscode
 .idea
 .DS_Store
@@ -10,3 +9,6 @@ typings
 
 dist
 test/*.js
+
+*.log
+.env*

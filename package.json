@@ -1,6 +1,6 @@
 {
   "name": "debuggo",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "General purpose debug library based on visionmedia/debug",
   "type": "module",
   "main": "./dist/index.js",

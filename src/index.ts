@@ -1,10 +1,21 @@
 import debug from 'debug';
-import type { Debugger } from 'debug';
+
+export interface Debugger {
+  (formatter: any, ...args: any[]): void;
+  color: string;
+  diff: number;
+  enabled: boolean;
+  log: (...args: any[]) => any;
+  namespace: string;
+  destroy: () => boolean;
+  extend: (namespace: string, delimiter?: string) => Debugger;
+}
+
+export type IDebugger = Debugger;
 
 const enable = debug.enable.bind(debug);
 const disable = debug.disable.bind(debug);
 export { enable, disable };
-export type { Debugger as IDebugger } from 'debug';
 
 export type LogLevel = 'trace' | 'debug' | 'log' | 'info' | 'warn' | 'error';
 export type LogMethodName = 'log' | 'info' | 'warn' | 'error' | 'debug' | 'trace';
